@@ -11,7 +11,7 @@
 <p align="center">
   <a href="https://sheets.gplansis.com"><img alt="No ar" src="https://img.shields.io/badge/no%20ar-sheets.gplansis.com-EB6A20?style=for-the-badge"></a>
   <img alt="Versão" src="https://img.shields.io/badge/versão-2.2.1-2D3336?style=for-the-badge">
-  <img alt="Licença" src="https://img.shields.io/badge/licença-a%20definir-6B7378?style=for-the-badge">
+  <a href="LICENSE"><img alt="licença MIT" src="https://img.shields.io/badge/licen%C3%A7a-MIT-2ea44f?style=flat-square"><">
 </p>
 
 <p align="center">
@@ -220,7 +220,7 @@ Comece por [CONTRIBUTING.md](CONTRIBUTING.md), siga o [Código de Conduta](CODE_
 
 ## Licença
 
-Licença: a definir pela GPlanSiS. Até lá, o código está visível para leitura e colaboração, mas sem uma licença de uso declarada.
+Código próprio sob a **[licença MIT](LICENSE)** — Copyright (c) 2026 GPlanSiS.
 
 Bibliotecas de terceiros incluídas mantêm suas próprias licenças: Apache ECharts e SheetJS Community Edition (Apache-2.0, textos em `public/vendor/`). Dependências Python: FastAPI (MIT), Uvicorn (BSD-3-Clause), httpx (BSD-3-Clause), SDK `anthropic` (MIT). Fonte IBM Plex Sans (SIL Open Font License), carregada do Google Fonts.
 

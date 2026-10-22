@@ -53,6 +53,6 @@ Veja a seção **Contribua** do [README](README.md#contribua) para áreas e boas
 
 ## Licença das contribuições
 
-A licença do projeto ainda está **a definir pela GPlanSiS**. Ao enviar uma contribuição, você concorda que ela poderá ser distribuída sob a licença que vier a ser adotada para o projeto.
+O projeto é distribuído sob a [licença MIT](LICENSE). Ao enviar uma contribuição, você declara que o código é seu (ou que tem direito de enviá-lo) e concorda que ela seja distribuída sob a licença MIT.
 
 Dúvidas: abra uma issue de pergunta ou escreva para contato@gplansis.com.
