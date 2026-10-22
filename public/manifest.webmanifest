@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "GPlanSiS|Sheets",
+  "short_name": "Sheets",
+  "description": "Planilha avançada com BI integrado do GPlanSiS",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#2D3336",
+  "background_color": "#2D3336",
+  "categories": ["productivity", "business"],
+  "icons": [
+    {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+    {"src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}
+  ]
+}

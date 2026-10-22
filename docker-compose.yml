@@ -1,0 +1,30 @@
+# GPlanSiS|Sheets 2.1 — sheets.gplansis.com (/opt/sheets)
+# App + API em 127.0.0.1:${SHEETS_PORT}, atrás do Caddy do host (TLS: deploy/sheets.caddy).
+# Uso: ./deploy.sh   (ou docker compose up -d --build)
+# Segredos em .env (SHEETS_MASTER_PASSWORD opcional na primeira subida; ANTHROPIC_API_KEY para a IA).
+services:
+  sheets:
+    build: .
+    image: gplansis/sheets:${SHEETS_VERSION:-2.2.1}
+    container_name: gplansis-sheets
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      TZ: America/Sao_Paulo
+      SHEETS_SECURE_COOKIE: "1"
+    ports:
+      - "127.0.0.1:${SHEETS_PORT:-8958}:8080"
+    volumes:
+      - ./dados:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    mem_limit: 512m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

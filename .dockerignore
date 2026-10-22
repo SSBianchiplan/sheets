@@ -1,0 +1,9 @@
+.git
+*.zip
+.env
+dados
+src/__pycache__
+server/__pycache__
+.github
+*.md
+!LEIA-ME.md

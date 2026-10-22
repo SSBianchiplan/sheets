@@ -1,0 +1,53 @@
+name: Relatar um bug
+description: Algo não funciona como deveria
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Obrigado por relatar! Falhas de segurança não vão aqui: veja SECURITY.md. Não inclua dados reais nem senhas."
+  - type: textarea
+    id: descricao
+    attributes:
+      label: O que aconteceu
+      description: Descreva o problema.
+    validations:
+      required: true
+  - type: textarea
+    id: passos
+    attributes:
+      label: Como reproduzir
+      placeholder: |
+        1. Abra a pasta de demonstração
+        2. Digite =PROCX(...) em A1
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: O que era esperado
+    validations:
+      required: true
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo
+      options: [Planilha / fórmulas, BI, Importar / exportar, Login / permissões, Configurações, Assistente de IA, Integração com o Docs, Celular / PWA, Versão offline, Outro]
+    validations:
+      required: true
+  - type: input
+    id: ambiente
+    attributes:
+      label: Navegador e sistema
+      placeholder: "Chrome 140 no Windows 11 / Safari no iPhone"
+  - type: input
+    id: versao
+    attributes:
+      label: Versão do GPlanSiS|Sheets
+      description: Aparece em Configurações, no rodapé do menu lateral.
+      placeholder: "2.2.1"
+  - type: textarea
+    id: extra
+    attributes:
+      label: Capturas de tela, arquivo de exemplo ou mensagens do console

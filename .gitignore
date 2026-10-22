@@ -1,0 +1,32 @@
+# Segredos e dados (nunca publicar)
+.env
+.env.*
+!.env.example
+dados/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.bak*
+*-bak-*
+backups/
+
+# Gerados por src/build.py (rode `python3 src/build.py`)
+public/index.html
+public/GPlanSiS-Sheets-offline.html
+public/sw.js
+CHECKSUMS.sha256
+
+# Python / ambiente
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Sistema / editores
+.DS_Store
+._*
+*.log
+*.zip
+.idea/
+.vscode/

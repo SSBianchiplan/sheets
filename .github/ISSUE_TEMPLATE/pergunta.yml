@@ -1,0 +1,16 @@
+name: Fazer uma pergunta
+description: Dúvida sobre uso, instalação ou código
+title: "[Pergunta] "
+labels: ["pergunta"]
+body:
+  - type: textarea
+    id: pergunta
+    attributes:
+      label: Sua pergunta
+    validations:
+      required: true
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Contexto
+      description: O que você já tentou, ambiente, versão.

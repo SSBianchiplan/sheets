@@ -1,0 +1,21 @@
+# GPlanSiS|Sheets 2.0 — sheets.gplansis.com (bloco próprio; não toca nos outros sites).
+# App + API em contêiner, 127.0.0.1:8958 (/opt/sheets). CSP e cabeçalhos vêm da aplicação.
+sheets.gplansis.com {
+	import seguranca_hub
+	# a IA responde em streaming: sem compressão nessa rota, para o texto chegar na hora
+	@comprime not path /api/ai/*
+	encode @comprime zstd gzip
+	request_body {
+		max_size 32MB
+	}
+	reverse_proxy 127.0.0.1:8958 {
+		flush_interval -1
+		header_up X-Forwarded-Proto https
+		transport http {
+			response_header_timeout 300s
+		}
+	}
+	log {
+		output file /var/log/caddy/sheets.log
+	}
+}
