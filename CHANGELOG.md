@@ -2,6 +2,11 @@
 
 Mudanças relevantes do GPlanSiS|Sheets. Detalhes de operação em [LEIA-ME.md](LEIA-ME.md).
 
+## [2.2.2]
+
+### Segurança
+- SheetJS Community Edition atualizado de 0.18.5 para 0.20.3 (`public/vendor/xlsx-0.20.3.full.min.js`), obtido do CDN oficial `cdn.sheetjs.com`. Corrige CVE-2023-30533 (prototype pollution ao ler arquivos) e CVE-2024-22363 (ReDoS). SHA-256 do arquivo: `cc015130aa8521e7f088f88898eba949ccdcbfb38df0bd129b44b7273c3a6f41`.
+
 ## [2.2.1]
 
 ### Adicionado

@@ -5,7 +5,7 @@
 services:
   sheets:
     build: .
-    image: gplansis/sheets:${SHEETS_VERSION:-2.2.1}
+    image: gplansis/sheets:${SHEETS_VERSION:-2.2.2}
     container_name: gplansis-sheets
     restart: unless-stopped
     env_file: .env

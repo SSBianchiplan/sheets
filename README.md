@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://sheets.gplansis.com"><img alt="No ar" src="https://img.shields.io/badge/no%20ar-sheets.gplansis.com-EB6A20?style=for-the-badge"></a>
-  <img alt="Versão" src="https://img.shields.io/badge/versão-2.2.1-2D3336?style=for-the-badge">
+  <img alt="Versão" src="https://img.shields.io/badge/versão-2.2.2-2D3336?style=for-the-badge">
   <a href="LICENSE"><img alt="licença MIT" src="https://img.shields.io/badge/licen%C3%A7a-MIT-2ea44f?style=flat-square"><">
 </p>
 
@@ -72,7 +72,7 @@ flowchart LR
   subgraph Navegador
     UI["Interface (JS puro)<br/>planilha · BI · configurações"]
     SW["Service worker<br/>(PWA, cache do shell)"]
-    VEN["ECharts 5.5.1<br/>SheetJS 0.18.5"]
+    VEN["ECharts 5.5.1<br/>SheetJS 0.20.3"]
   end
   subgraph Servidor["Contêiner Docker (uvicorn, 1 worker)"]
     API["FastAPI<br/>server/app.py"]
@@ -101,7 +101,7 @@ flowchart LR
 | Back-end | Python 3.12, FastAPI, Uvicorn, httpx, SDK `anthropic` |
 | Banco | SQLite em modo WAL (usuários, sessões, pastas, ACL, versões, auditoria, configurações) |
 | Front-end | JavaScript puro (ES2020+), canvas para a grade, CSS com variáveis de tema, fonte IBM Plex Sans |
-| Gráficos e arquivos | Apache ECharts 5.5.1, SheetJS Community Edition 0.18.5 |
+| Gráficos e arquivos | Apache ECharts 5.5.1, SheetJS Community Edition 0.20.3 |
 | Implantação | Docker / Docker Compose, Caddy como proxy reverso com TLS |
 
 ## Como rodar localmente
@@ -210,7 +210,6 @@ O GPlanSiS|Sheets é aberto para quem quiser ajudar: desenvolvedores, analistas 
 
 **Boas primeiras issues**
 
-- Atualizar o SheetJS de `0.18.5` para a versão atual distribuída pelo próprio SheetJS (corrige vulnerabilidades conhecidas da 0.18.5) e conferir importação e exportação.
 - Criar uma suíte de testes automatizados para `src/b_formula.js` (entrada → resultado esperado).
 - Criar testes da API com `pytest` + `httpx` cobrindo login, CSRF, permissões e conflito de versão.
 - Documentar a lista de funções suportadas, gerada a partir do código.

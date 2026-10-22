@@ -46,7 +46,7 @@ body:
     attributes:
       label: Versão do GPlanSiS|Sheets
       description: Aparece em Configurações, no rodapé do menu lateral.
-      placeholder: "2.2.1"
+      placeholder: "2.2.2"
   - type: textarea
     id: extra
     attributes:

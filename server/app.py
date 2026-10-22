@@ -29,7 +29,7 @@ import httpx
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse
 
-VERSION = "2.2.1"
+VERSION = "2.2.2"
 DATA_DIR = Path(os.environ.get("SHEETS_DATA", "/data"))
 STATIC_DIR = Path(os.environ.get("SHEETS_STATIC", Path(__file__).resolve().parent.parent / "public"))
 DB_PATH = DATA_DIR / "sheets.db"

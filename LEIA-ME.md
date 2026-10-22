@@ -1,4 +1,4 @@
-# GPlanSiS|Sheets 2.2.1
+# GPlanSiS|Sheets 2.2.2
 
 Planilha avançada no padrão Excel com módulo BI integrado, agora como sistema multiusuário: login, papéis e permissões, pastas guardadas no servidor com histórico de versões, compartilhamento, auditoria encadeada, modo Configurações com avatar e assistente de IA pelo servidor.
 
@@ -26,7 +26,7 @@ Produção: **https://sheets.gplansis.com** (servidor de produção, `/opt/sheet
 |---|---|
 | `server/app.py` | API (FastAPI) e servidor dos arquivos estáticos. Um processo, um SQLite em `/data`. |
 | `src/` | Código-fonte do front-end. `p_server.js` (sessão, salvamento, compartilhamento, versões) e `q_cfg.js` (modo Configurações) são novos. `t_pwa.js` (celular e registro do service worker) e `sw.js` (modelo do service worker). `build.py` gera os dois HTML e o `public/sw.js`. |
-| `public/` | `index.html`, versão offline, `vendor/` (ECharts 5.5.1 e SheetJS 0.18.5, sem CDN). |
+| `public/` | `index.html`, versão offline, `vendor/` (ECharts 5.5.1 e SheetJS 0.20.3, sem CDN). |
 | `Dockerfile`, `docker-compose.yml`, `.env.example` | Contêiner sem root, sistema de arquivos somente leitura, sem capabilities, limite de memória e logs com rotação. |
 | `deploy/sheets.caddy` | Bloco do Caddy para `sheets.gplansis.com`. |
 | `deploy.sh` | No servidor: backup do banco, build, subida e espera do healthcheck; `rollback <versão>`; `backup`. |
@@ -52,6 +52,10 @@ ssh "$HOST" 'docker logs --tail 50 gplansis-sheets'
 ```bash
 python3 src/build.py
 ```
+
+## Mudanças na 2.2.2
+
+- SheetJS 0.18.5 → 0.20.3 (CDN oficial `cdn.sheetjs.com`; corrige CVE-2023-30533 e CVE-2024-22363). SHA-256 de `public/vendor/xlsx-0.20.3.full.min.js`: `cc015130aa8521e7f088f88898eba949ccdcbfb38df0bd129b44b7273c3a6f41`. Não atualize pelo npm: lá o pacote `xlsx` parou na 0.18.5.
 
 ## Mudanças na 2.2.1
 

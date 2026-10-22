@@ -6,7 +6,7 @@ const VERSION = '__VERSION__';
 const CACHE = 'sheets-' + VERSION;
 const SHELL = '/';
 const PRECACHE = [SHELL, '/favicon.svg', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png',
-  '/apple-touch-icon.png', '/vendor/echarts-5.5.1.min.js', '/vendor/xlsx-0.18.5.full.min.js'];
+  '/apple-touch-icon.png', '/vendor/echarts-5.5.1.min.js', '/vendor/xlsx-0.20.3.full.min.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRECACHE.map(u => new Request(u, {cache: 'reload'})))).then(() => self.skipWaiting()));

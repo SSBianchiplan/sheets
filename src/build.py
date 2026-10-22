@@ -7,8 +7,8 @@ MODS=['a_util.js','b_formula.js','c_model.js','d_grid.js','e_interact.js','f_ico
 css=rd('0_head.html').replace('<title>GPlanSiS|Sheets</title>','<title>GPlanSiS|Sheets</title>\n<link rel="icon" href="favicon.svg" type="image/svg+xml">')+rd('1_bi.css')+rd('1b_srv.css');body=rd('2_body.html')
 js=("'use strict';\n"+"\n".join(rd(f).replace("'use strict';","") for f in MODS)).replace('</script','<\\/script')
 V=lambda f:open(os.path.join(P,'vendor',f),encoding='utf-8').read().replace('</script','<\\/script')
-idx=css+body+'<script src="vendor/echarts-5.5.1.min.js"></script>\n<script src="vendor/xlsx-0.18.5.full.min.js"></script>\n<script>\n'+js+'\n</script>\n</body>\n</html>\n'
-off=css+body+'<script>\n'+V('echarts-5.5.1.min.js')+'\n</script>\n<script>\n'+V('xlsx-0.18.5.full.min.js')+'\n</script>\n<script>\n'+js+'\n</script>\n</body>\n</html>\n'
+idx=css+body+'<script src="vendor/echarts-5.5.1.min.js"></script>\n<script src="vendor/xlsx-0.20.3.full.min.js"></script>\n<script>\n'+js+'\n</script>\n</body>\n</html>\n'
+off=css+body+'<script>\n'+V('echarts-5.5.1.min.js')+'\n</script>\n<script>\n'+V('xlsx-0.20.3.full.min.js')+'\n</script>\n<script>\n'+js+'\n</script>\n</body>\n</html>\n'
 import re,hashlib
 off=re.sub(r'<!--pwa-->.*?<!--/pwa-->\n?','',off,flags=re.S)  # o arquivo offline abre como file:, sem manifesto
 idx=idx.replace('<!--pwa-->','').replace('<!--/pwa-->','')
