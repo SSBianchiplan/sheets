@@ -19,6 +19,7 @@ import os
 import re
 import secrets
 import sqlite3
+import sys
 import threading
 import time
 from contextlib import contextmanager
@@ -26,10 +27,11 @@ from pathlib import Path
 from typing import Any
 
 import httpx
+import ia_cota
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse
 
-VERSION = "2.2.2"
+VERSION = "2.2.3"
 DATA_DIR = Path(os.environ.get("SHEETS_DATA", "/data"))
 STATIC_DIR = Path(os.environ.get("SHEETS_STATIC", Path(__file__).resolve().parent.parent / "public"))
 DB_PATH = DATA_DIR / "sheets.db"
@@ -1412,6 +1414,9 @@ AI_SYSTEM = ("Você é o assistente de planilhas e BI do GPlanSiS|Sheets, no pad
              "Responda em português do Brasil.")
 
 
+AI_MAX_TOKENS = 32000  # teto por resposta (antes 64k); o custo real entra na cota mensal (ia_cota)
+
+
 def ai_client(key: str):
     h = hashlib.sha256(key.encode()).hexdigest()
     if h not in _ai_clients:
@@ -1428,7 +1433,7 @@ def ai_stream(st: dict, prompt: str, effort: str):
         extra = {"betas": ["server-side-fallback-2026-07-01"], "fallbacks": "default"}
     return ai_client(ai_key(st)).beta.messages.stream(
         model=model,
-        max_tokens=64000,
+        max_tokens=AI_MAX_TOKENS,
         output_config={"effort": effort},
         system=AI_SYSTEM,
         messages=[{"role": "user", "content": prompt}],
@@ -1436,38 +1441,48 @@ def ai_stream(st: dict, prompt: str, effort: str):
     )
 
 
-async def ai_prompt(req: Request) -> tuple[dict, str, str, dict]:
+async def ai_prompt(req: Request) -> tuple[dict, str, str, dict, ia_cota.Call]:
     u = current_user(req)
     need(u, "ai.use")
-    b = await body(req, 400_000)
-    prompt = str(b.get("prompt") or "").strip()
-    if not prompt:
-        raise HTTPException(400, "Prompt vazio")
     with ro() as c:
         st = get_settings(c)
     if not ai_ready(st):
-        raise HTTPException(503, "IA desativada neste servidor")
+        raise HTTPException(503, "A IA não está configurada neste servidor. Um administrador precisa informar a chave da "
+                                 "Anthropic em Configurações.")
+    b = await ia_cota.read_body(req, 400_000)
+    prompt = str(b.get("prompt") or "").strip()
+    if not prompt:
+        raise HTTPException(400, "Prompt vazio")
+    call = ia_cota.open_call(u, st, "json" if b.get("kind") == "json" else "texto")  # 402 cota / 429 ritmo
     effort = "low" if b.get("tier") == "quick" else (st.get("ai_effort") or "medium")
     with tx() as c:
         audit(c, "ia.chamada", {"tipo": str(b.get("kind") or "texto")[:20], "chars": len(prompt), "modelo": st.get("ai_model")},
               user=u, ip=client_ip(req))
-    return u, prompt, effort, st
+    return u, prompt, effort, st, call
 
 
 @app.post("/api/ai/sample")
 async def ai_sample(req: Request):
-    _u, prompt, effort, st = await ai_prompt(req)
+    _u, prompt, effort, st, call = await ai_prompt(req)
 
     def gen():
+        stream = None
         try:
             with ai_stream(st, prompt, effort) as stream:
                 for text in stream.text_stream:
                     yield text
-                if stream.get_final_message().stop_reason == "refusal":
+                final = stream.get_final_message()
+                call.use(final)
+                if final.stop_reason == "refusal":
                     yield "\n[A IA recusou esta solicitação.]"
-        except Exception as e:  # o cliente mostra a mensagem
-            log.exception("falha na IA")
-            yield f"\n\u0000ERRO:{type(e).__name__}"
+        except Exception as e:  # o cliente mostra só um código curto, nunca o texto do erro
+            if stream is not None:
+                call.use_stream(stream)
+            call.fail(e)
+            log.error("falha na IA (%s)", call.err)
+            yield "\n\u0000ERRO:" + call.err.split(":")[0]
+        finally:
+            call.close()
 
     return StreamingResponse(gen(), media_type="text/plain; charset=utf-8", headers={"X-Accel-Buffering": "no"})
 
@@ -1489,13 +1504,20 @@ def extract_json(text: str) -> Any:
 
 @app.post("/api/ai/json")
 async def ai_json(req: Request):
-    _u, prompt, effort, st = await ai_prompt(req)
+    _u, prompt, effort, st, call = await ai_prompt(req)
+    stream = None
     try:
         with ai_stream(st, prompt + "\n\nResponda somente com o JSON pedido, sem texto antes ou depois.", effort) as stream:
             final = stream.get_final_message()
+        call.use(final)
     except Exception as e:
-        log.exception("falha na IA")
-        raise HTTPException(502, f"Falha ao consultar a IA ({type(e).__name__})")
+        if stream is not None:
+            call.use_stream(stream)
+        err = call.fail(e)
+        log.error("falha na IA (%s)", call.err)
+        raise err
+    finally:
+        call.close()
     if final.stop_reason == "refusal":
         raise HTTPException(422, "A IA recusou esta solicitação.")
     text = "".join(bl.text for bl in final.content if bl.type == "text")
@@ -1832,3 +1854,7 @@ def static(name: str):
             return static_resp(STATIC_DIR / name, "no-cache", media_type=PWA_TYPES[name])
         return static_resp(STATIC_DIR / name, "no-cache" if name == "index.html" else "public, max-age=86400")
     return static_resp(STATIC_DIR / "index.html", "no-cache")
+
+
+# cota mensal, ritmo e contabilidade de uso da IA (server/ia_cota.py)
+ia_cota.instalar(app, sys.modules[__name__])

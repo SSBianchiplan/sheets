@@ -2,14 +2,14 @@
 FROM python:3.12-slim
 LABEL org.opencontainers.image.title="GPlanSiS|Sheets" \
       org.opencontainers.image.description="Planilha avançada com BI integrado, login, permissões e auditoria" \
-      org.opencontainers.image.version="2.2.2" \
+      org.opencontainers.image.version="2.2.3" \
       org.opencontainers.image.vendor="GPlanSiS|Group"
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 SHEETS_DATA=/data SHEETS_STATIC=/srv/public
 RUN useradd -u 10001 -M -s /usr/sbin/nologin sheets && mkdir -p /data && chown sheets /data
 WORKDIR /srv
 COPY server/requirements.txt server/requirements.txt
 RUN pip install --no-cache-dir -r server/requirements.txt
-COPY server/app.py server/app.py
+COPY server/app.py server/ia_cota.py server/
 COPY public/ public/
 USER sheets
 EXPOSE 8080
